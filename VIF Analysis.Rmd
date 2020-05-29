@@ -1,34 +1,48 @@
+---
+title: "VIF_analysis_Ungulate_Traits"
+output: html_document
+---
+
 #VIF Analysis 
 
 #Set WD and install packages
+
+```{r install}
 getwd()
 install.packages("usdm")
 library(usdm)
 install.packages("phylolm")
 library(phylolm)
+```
+
+Load data:
+
+```{r load}
 Ungulate <- read.csv("UngulateTraits.csv", delim = 'x', header = TRUE)
+```
 
 #VIF analysis
 
-title: "VIF_analysis_Ungulate_Traits"
-output: html_document
----
+
   
-  ``{r setup include=FALSE}
+```{r setup include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-{r}``
+```
+
+```{r}
 #load required package
 library(usdm)
 #general code for VIF analysis
 vif(Ungulate[,c(8:59)])
-``
+```
 
-``{r}
+```{r}
 #load variable overview
 project_root <- 'C:/Users/Kes Lippert/Desktop/Domesticability R project/Domesticability-Analysis-2/'
 variable_file <- paste(c(project_root, 'GIS/Variables_overview.md'), collapse = '')
 variable_overview <- read.delim(variable_file)
 variable_overview <- variable_overview[1:52,1:2]
+```
 
 ## Hypothesis
 
