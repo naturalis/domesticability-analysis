@@ -15,6 +15,12 @@ library(corrplot)
 library(dplyr)
 library(caret)
 library(ape)
+library(ggplot2)
+library(Rphylopars)
+library(tidyverse)
+library(phylogram)
+install.packages("ggtree")
+
 ```
 
 Load data:
@@ -107,13 +113,18 @@ rm(dropRows, dropTips)
 
 formula <- Domestication ~ Aspect + ClayPercentage + X1.1_ActivityCycle + X21.1_PopulationDensity_n.km2 + X10.2_SocialGrpSize + MaturityReachFemale + MatingSystem + BreedingInterval + YearRoundBreeding + Horns.Antlers + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + OrganicCarbon
 
+formula2 <- Domestication ~ X1.1_ActivityCycle + X5.1_AdultBodyMass_g + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + MatingSystem + YearRoundBreeding + Horns_Antlers + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + OrganicCarbon
+
 phyloglmstep(formula, starting.formula = NULL, data=Merged_Data, Ungulatetree, 
                          method = "logistic_MPLE",
                          direction = "forward", trace = 2,
                          btol = 10, log.alpha.bound = 4, start.beta=NULL, 
                          start.alpha=NULL, boot = 0, full.matrix = TRUE,
                          k=2) 
-
+phyloglmstep(formula2, starting.formula = NULL, data=data, phy=phyloTree, 
+             method="logistic_MPLE", direction = "forward", trace = 2, 
+             btol = 10, log.alpha.bound = 4, start.beta=NULL, 
+             start.alpha=NULL, boot = 0, full.matrix = TRUE, k=2)
 
 
 ```
