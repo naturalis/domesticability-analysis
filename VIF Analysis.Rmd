@@ -19,8 +19,6 @@ library(ggplot2)
 library(Rphylopars)
 library(tidyverse)
 library(phylogram)
-install.packages("ggtree")
-
 ```
 
 Load data:
@@ -93,10 +91,31 @@ dropRows <- setdiff(Merged_Data$CanonicalName, Ungulatetree$tip.label)
 row.names(Merged_Data) <- Merged_Data$CanonicalName
 Merged_Data <- Merged_Data[!(row.names(Merged_Data) %in% dropRows), ]
 
+#rename columns with dots in the name
+Merged_Data <- Merged_Data %>% rename(Horns_Antlers = Horns.Antlers,
+                              X21.1_PopulationDensity_n_km2 = X21.1_PopulationDensity_n.km2)
+#remove traits that (almost) only consist of missing values (>100 NA)
+Merged_Data <- subset(Merged_Data, select = -c(X5.4_WeaningBodyMass_g, X13.3_WeaningHeadBodyLen_mm, X13.2_NeonateHeadBodyLen_mm, X18.1_BasalMetRate_mLO2hr, X5.2_BasalMetRateMass_g, X2.1_AgeatEyeOpening_d, X8.1_AdultForearmLen_mm, X10.1_PopulationGrpSize))
+
+#remove traits without any information gain (only consist of one value)
+Merged_Data <- subset(Merged_Data, select = -c(Motility, ParentalCare, X12.2_Terrestriality))
+
+#remove traits that are almost identical to other traits
+Merged_Data <- subset(Merged_Data, select = -c(PullStrength, NumOffspring, BreedingInterval, 
+                                       Diet, AVGWeight, MaturityReachFemale,
+                                       MaturityReachMale, X22.2_HomeRange_Indiv_km2,
+                                       X5.3_NeonateBodyMass_g,X16.1_LittersPerYear,X7.1_DispersalAge_d))
+
 # Drop tips that aren't in dataset
 
 dropTips <- setdiff(Ungulatetree$tip.label, Merged_Data$CanonicalName)
 Ungulatetree <- drop.tip(Ungulatetree, dropTips)
+
+
+
+#Complete cases
+
+Merged_Data <- Merged_Data[complete.cases(Merged_Data),]
 
 # Final check if there are any differences
 
@@ -115,13 +134,15 @@ formula <- Domestication ~ Aspect + ClayPercentage + X1.1_ActivityCycle + X21.1_
 
 formula2 <- Domestication ~ X1.1_ActivityCycle + X5.1_AdultBodyMass_g + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + MatingSystem + YearRoundBreeding + Horns_Antlers + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + OrganicCarbon
 
+#Formula 1 with lowest VIF values and all traits
 phyloglmstep(formula, starting.formula = NULL, data=Merged_Data, Ungulatetree, 
                          method = "logistic_MPLE",
                          direction = "forward", trace = 2,
                          btol = 10, log.alpha.bound = 4, start.beta=NULL, 
                          start.alpha=NULL, boot = 0, full.matrix = TRUE,
                          k=2) 
-phyloglmstep(formula2, starting.formula = NULL, data=data, phy=phyloTree, 
+#Formula 2 without Habitat Breadth
+phyloglmstep(formula2, starting.formula = NULL, data=Merged_Data, phy=Ungulatetree, 
              method="logistic_MPLE", direction = "forward", trace = 2, 
              btol = 10, log.alpha.bound = 4, start.beta=NULL, 
              start.alpha=NULL, boot = 0, full.matrix = TRUE, k=2)
