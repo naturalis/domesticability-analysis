@@ -23,21 +23,12 @@ library(phylolm)
 #source("https://raw.githubusercontent.com/naturalis/angiosperm-traits/master/phyloglmstep.R")
 ```
 
-### Declare project root and paths
-```{r declare root and paths}
-root <- "/home/zoe/Documents/GitHub/trait-organismal-ungulates-R"
-treeFile <- paste(c(root, "/data/ungulates.tree"), collapse = "")
-ungulatesFile <- paste(c(root, "/data/CSV/ungulatesTraits.csv"), collapse = "")
-omiFile <- ("https://raw.githubusercontent.com/naturalis/trait-geo-diverse-ungulates/master/results/OMI/niche_traits.csv")
-```
-
-### Import tree and domestication data
+### Import data
 ```{r import data}
-ungulatesData <- read.csv(ungulatesFile, header = TRUE, sep= ",")
-omi <- read.csv(omiFile)
-tree <- read.tree(treeFile)
+ungulatesData <- read.csv("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/CSV/ungulatesTraits.csv")
+omi <- read.csv("https://raw.githubusercontent.com/naturalis/trait-geo-diverse-ungulates/master/results/OMI/niche_traits.csv")
+tree <- read.tree("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/ungulates.tree")
 ```
-
 
 ### Merge datasets
 ```{r merge data}
