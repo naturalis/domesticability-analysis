@@ -12,7 +12,7 @@ names(modelData)[names(modelData)=="dataset$Domestication"] <- "Domestication"
 names(modelData)[names(modelData)=="dataset$CanonicalName"] <- "CanonicalName"
 
 # Only domesticated species REMOVE LATER
-domData <- modelData[modelData$Domestication == 1,]
+#domData <- modelData[modelData$Domestication == 1,]
 
 # Only the rows without any missing values are selected
 modelData <- modelData[complete.cases(modelData),]
