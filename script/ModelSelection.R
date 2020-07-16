@@ -12,10 +12,11 @@ names(modelData)[names(modelData)=="dataset$Domestication"] <- "Domestication"
 names(modelData)[names(modelData)=="dataset$CanonicalName"] <- "CanonicalName"
 
 # Only domesticated species REMOVE LATER
-# domData <- modelData[modelData$Domestication == 1,]
+domData <- modelData[modelData$Domestication == 1,]
 
 # Only the rows without any missing values are selected
 modelData <- modelData[complete.cases(modelData),]
+#test <- modelData[rowSums(is.na(modelData)) == 1,]
 
 # Dropping species from the tree
 dropTips <- setdiff(tree$tip.label, modelData$CanonicalName)
@@ -27,7 +28,7 @@ modelTree <- drop.tip(tree, dropTips)
 # Domestication trait needs to be converted to 0-1 instead of the 1-2 it's now.
 # The 'wild' state (2) will be converted to the zero state (0). This way 'wild'
 # appears as 0 and 'domesticated' appears as 1.
-modelData$Domestication[modelData$Domestication==2] <- 0 
+modelData$Domestication[modelData$Domestication==2] <- 0
 
 
 ## FORMULAS
