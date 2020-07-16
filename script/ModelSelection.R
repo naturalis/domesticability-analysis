@@ -35,8 +35,57 @@ modelData$Domestication[modelData$Domestication==2] <- 0
 # The input formulas are defined, which are going to be used as input for the
 # phyloglmstep function.
 
-# Formula1: Current model: Domestication ~ 1 + X15.1_LitterSize + Horns_Antlers + NaturalPredators + AVGMovingSpeed - AIC(k=2): 19.2464091190541
+# Formula1: All predictors
+# Results: Current model: Domestication ~ 1 + X15.1_LitterSize + Horns_Antlers + NaturalPredators + AVGMovingSpeed - AIC(k=2): 19.2464091190541
 formula1 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula2: Without X5.1_AdultBodyMass_g
+# Results: 
+formula2 <- Domestication ~ X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula3: Without X1.1_ActivityCycle
+# Results: 
+formula3 <- Domestication ~ X5.1_AdultBodyMass_g + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula4: Without X6.1_DietBreadth
+# Results: 
+formula4 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula5: Without X12.1_HabitatBreadth
+# Results: 
+formula5 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula6: Without X15.1_LitterSize
+# Results: 
+formula6 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula7: Without X21.1_PopulationDensity_n_km2
+# Results: 
+formula7 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula8: Without X10.2_SocialGrpSize
+# Results: 
+formula8 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula9: Without Sociality
+# Results: 
+formula9 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula10: Without SocialHierarchy
+# Results: 
+formula10 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula11: Without MatingSystem
+# Results: 
+formula11 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula12: Without YearRoundBreeding
+# Results: 
+formula12 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+
+# Formula13: Without DevelopmentStrategy
+# Results: 
+formula13 <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X6.1_DietBreadth + X12.1_HabitatBreadth + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
 
 
 ### MODEL SELECTION
