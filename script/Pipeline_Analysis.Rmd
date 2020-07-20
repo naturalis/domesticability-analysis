@@ -124,3 +124,23 @@ source("VIF.R")
 source("ModelSelection.R")
 ```
 
+
+# 5 Modelling analysis
+## WIP
+
+The phylogenetic generalized linear modelling analysis optimizes the model. The
+function phyloglm from the phylolm package is used for this.
+
+```{r}
+# Converting dependent variable to binary state
+# Domesticated = 1, wild = 0
+dataset$Domestication[dataset$Domestication==2] <- 0
+
+# Construct model
+GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4)
+
+summary(GLM)
+```
+
+
+
