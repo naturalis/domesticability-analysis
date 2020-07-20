@@ -86,8 +86,8 @@ names(dataset)[names(dataset)=="X21.1_PopulationDensity_n.km2"] <- "X21.1_Popula
 dataset <- subset(dataset, select = -c(X5.4_WeaningBodyMass_g, X13.3_WeaningHeadBodyLen_mm, X13.2_NeonateHeadBodyLen_mm, X18.1_BasalMetRate_mLO2hr, X5.2_BasalMetRateMass_g, X2.1_AgeatEyeOpening_d, X8.1_AdultForearmLen_mm, X10.1_PopulationGrpSize))
 
 
-# Remove traits without any information gain (only consist of one value)
-dataset <- subset(dataset, select = -c(Motility, ParentalCare, X12.2_Terrestriality))
+# Remove traits without any information gain (only consist of one value or is an incomplete case (Habitat/Diet Breadth))
+dataset <- subset(dataset, select = -c(Motility, ParentalCare, X12.2_Terrestriality, X6.1_DietBreadth, X12.1_HabitatBreadth))
 
 
 # Remove traits that are almost identical to other traits
