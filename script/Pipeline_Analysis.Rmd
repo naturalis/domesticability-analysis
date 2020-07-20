@@ -23,9 +23,9 @@ library(phylolm)
 ```
 
 ### Import data
-The datasets can be found in different GitHub repositories. The ungulates
-dataset and tree can be found in the trait-organismal-ungulates repository. The
-OMI data is found in the trait-geo-diverse-ungulates repository.
+#The datasets can be found in different GitHub repositories. The ungulates
+#dataset and tree can be found in the trait-organismal-ungulates repository. The
+#OMI data is found in the trait-geo-diverse-ungulates repository.
 ```{r import data}
 ungulatesData <- read.csv("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/CSV/ungulatesTraits.csv")
 omi <- read.csv("https://raw.githubusercontent.com/naturalis/trait-geo-diverse-ungulates/master/results/OMI/niche_traits.csv")
@@ -33,7 +33,7 @@ tree <- read.tree("https://raw.githubusercontent.com/naturalis/trait-organismal-
 ```
 
 ### Merge datasets
-The ungulates data and OMI data have to be merged into one dataset. The EoL-ID is removed and the data is merged by the canonical name (present in both the datasets). The last step is replacing the spaces in the canonical name with underscores, to match the species names in the tree.
+#The ungulates data and OMI data have to be merged into one dataset. The EoL-ID is removed and the data is merged by the canonical name (present in both the datasets). The last step is replacing the spaces in the canonical name with underscores, to match the species names in the tree.
 ```{r merge data}
 ungulatesData <- ungulatesData[2:60]
 names(omi)[names(omi)=="X"] <- "CanonicalName"
@@ -48,7 +48,7 @@ rm(ungulatesData, omi)
 # 2 Preprocessing
 
 ### Equalize species in tree and dataset
-First the 'Equus asinus' is renamed to the 'Equus africanus' in the tree, to match the species in the dataset. The species names that aren't in the tree, are dropped from the dataset. The species that aren't in the dataset, are dropped from the tree.
+#First the 'Equus asinus' is renamed to the 'Equus africanus' in the tree, to match the species in the dataset. The species names that aren't in the tree, are dropped from the dataset. The species that aren't in the dataset, are dropped from the tree.
 ```{r check if names match between dataset and tree}
 # Edited Equus asinus to Equus africanus in tree 
 tree$tip.label[tree$tip.label=="Equus_asinus"] <- "Equus_africanus"
@@ -72,10 +72,10 @@ rm(dropRows, dropTips)
 ```
 
 ### Miscellaneous preprocessing
-The dots in the column names are replaced with underscores. After that, the
-traits that consist of more than 100 missing values, traits that have no
-information gain and traits that are almost identical to other traits are
-removed.
+#The dots in the column names are replaced with underscores. After that, the
+#traits that consist of more than 100 missing values, traits that have no
+#information gain and traits that are almost identical to other traits are
+#removed.
 ```{r misc preprocessing}
 # Rename columns with dots in the name
 names(dataset)[names(dataset)=="Horns.Antlers"] <- "Horns_Antlers"
@@ -101,12 +101,12 @@ dataset <- subset(dataset, select = -c(PullStrength, NumOffspring, BreedingInter
 
 # 3 VIF-analysis
 
-There probably will be some collinearity between the different traits in the
-dataset. Collinearity could lead to bias in the model, so a correction will have
-to be done. This can be done using the Variance Inflation Factor (vif).
+#There probably will be some collinearity between the different traits in the
+#dataset. Collinearity could lead to bias in the model, so a correction will have
+#to be done. This can be done using the Variance Inflation Factor (vif).
 
-The VIF.R script contains the whole VIF analysis. The R script is sourced, which only
-needs the 'dataset' variable and outputs the 'predictors' variable
+#The VIF.R script contains the whole VIF analysis. The R script is sourced, which only
+#needs the 'dataset' variable and outputs the 'predictors' variable
 
 ```{r VIF, results='markup'}
 source("VIF.R")
@@ -115,13 +115,12 @@ source("VIF.R")
 
 # 4 Model Selection
 
-The Generalized Linear Model (GLM) must be made. The Domestication column is
-used as the dependent variable, and the other columns are the predictor
-variables. For the model selection the phylolm package and phyloglmstep function
-are used.
+#The Generalized Linear Model (GLM) must be made. The Domestication column is
+#used as the dependent variable, and the other columns are the predictor
+#variables. For the model selection the phylolm package and phyloglmstep function
+#are used.
 
 ```{r}
 source("ModelSelection.R")
-
 ```
 
