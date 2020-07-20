@@ -1,7 +1,7 @@
 # IMPORT PACKAGES
-#library(usdm)
-#library(caret)
-#library(corrplot)
+library(usdm)
+library(caret)
+library(corrplot)
 
 ## BEGIN VALUES
 cat("The correlation matrix without removing any traits. There is a lot of collinearity present.")
