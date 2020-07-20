@@ -49,7 +49,7 @@ vif(vifPredictors)
 
 predictors <- vifPredictors
 ## FINAL VALUES
-cat("The correlation matrix after removing all unnecessary traits. Almost all of the collinearity is removed\n(except for the collinearity with AdultBodyMass).")
+cat("The correlation matrix after removing all unnecessary traits")
 matrix <- cor(predictors, use = "pairwise.complete.obs")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.5)
 ## REMOVE VARIABLES

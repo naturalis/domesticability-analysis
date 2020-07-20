@@ -1,10 +1,12 @@
-
+---
+title: "Pipeline_Analysis"
+output: html_document
+---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, results = FALSE)
 ```
 # 1 Import data
-First the needed packages, data and phylogenetic tree are loaded into R. The
-trait data and OMI data need to be merged.
+# Our first step is to import packages and data into R. The trait data and OMI data also need to be merged.
 ### Load packages
 ```{r Load packages, message=FALSE}
 library(ape)
@@ -15,31 +17,31 @@ library(corrplot)
 library(phylolm)
 ```
 ### Import data
-The datasets can be found in different GitHub repositories. The ungulates
-dataset and tree can be found in the trait-organismal-ungulates repository. The
-OMI data is found in the trait-geo-diverse-ungulates repository.
+# The datasets can be found in different GitHub repositories. The ungulate
+# dataset and tree can be found in the trait-organismal-ungulates repository. 
+# The OMI data is found in the trait-geo-diverse-ungulates repository.
 ```{r import data}
 ungulatesData <- read.csv("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/CSV/ungulatesTraits.csv")
 omi <- read.csv("https://raw.githubusercontent.com/naturalis/trait-geo-diverse-ungulates/master/results/OMI/niche_traits.csv")
 tree <- read.tree("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/ungulates.tree")
 ```
 ### Merge datasets
-The ungulates data and OMI data have to be merged into one dataset. The EoL-ID is removed and the data is merged by the canonical name (present in both the datasets). The last step is replacing the spaces in the canonical name with underscores, to match the species names in the tree.
+#The ungulate data and OMI data have to be merged into one dataset. The EoL-ID is removed and the data is merged by the canonical name (present in both the datasets). The last step is to replace the spaces in the canonical name with underscores, to match the species names in the tree.
 ```{r merge data}
 ungulatesData <- ungulatesData[2:60]
 names(omi)[names(omi)=="X"] <- "CanonicalName"
 dataset <- merge(ungulatesData, omi, by="CanonicalName")
 dataset$CanonicalName <- gsub(" ", "_", dataset$CanonicalName)
-# Remove all unnecessary variables 
+# Clean up the global environment 
 rm(ungulatesData, omi)
 ```
 # 2 Preprocessing
 ### Equalize species in tree and dataset
-First the 'Equus asinus' is renamed to the 'Equus africanus' in the tree, to match the species in the dataset. The species names that aren't in the tree, are dropped from the dataset. The species that aren't in the dataset, are dropped from the tree.
+# To start, 'Equus asinus' is renamed to the 'Equus africanus' in the tree, to match the dataset. The species that aren't in the tree are dropped from the dataset. The species that aren't in the dataset are dropped from the tree.
 ```{r check if names match between dataset and tree}
-# Edited Equus asinus to Equus africanus in tree 
+# Changed Equus asinus to Equus africanus in the tree 
 tree$tip.label[tree$tip.label=="Equus_asinus"] <- "Equus_africanus"
-# Which species aren't in the tree
+# Check Which species aren't in the tree
 dropRows <- setdiff(dataset$CanonicalName, tree$tip.label)
 # Drop rows that aren't in the tree (check manually if these are domesticated)
 row.names(dataset) <- dataset$CanonicalName
@@ -47,16 +49,16 @@ dataset <- dataset[!(row.names(dataset) %in% dropRows), ]
 # Drop tips that aren't in dataset
 dropTips <- setdiff(tree$tip.label, dataset$CanonicalName)
 tree <- drop.tip(tree, dropTips)
-# Final check if there are any differences
+# Final check to see if there are any differences
 setdiff(dataset$CanonicalName, tree$tip.label)
 setdiff(tree$tip.label, dataset$CanonicalName)
 rm(dropRows, dropTips)
 ```
 ### Miscellaneous preprocessing
-The dots in the column names are replaced with underscores. After that, the
-traits that consist of more than 100 missing values, traits that have no
-information gain and traits that are almost identical to other traits are
-removed.
+#The dots in the column names are replaced with underscores. After that, the
+#traits that consist of more than 100 missing values, traits that have no
+#information gain and traits that are almost identical to other traits are
+#removed.
 ```{r misc preprocessing}
 # Rename columns with dots in the name
 names(dataset)[names(dataset)=="Horns.Antlers"] <- "Horns_Antlers"
@@ -71,70 +73,37 @@ dataset <- subset(dataset, select = -c(PullStrength, NumOffspring, BreedingInter
                                        X22.2_HomeRange_Indiv_km2, X5.3_NeonateBodyMass_g,
                                        X16.1_LittersPerYear,X7.1_DispersalAge_d))
 ```
-# 3 VIF-analysis
-There probably will be some collinearity between the different traits in the
-dataset. Collinearity could lead to bias in the model, so a correction will have
-to be done. This can be done using the Variance Inflation Factor (vif).
-The VIF.R script contains the whole VIF analysis. The R script is sourced, which only
-needs the 'dataset' variable and outputs the 'predictors' variable
+### 3 VIF-analysis
+
+# There is probably collinearity present amongst the traits in the
+# dataset. Collinearity can lead to bias in the model, so we must correct for this. This can be done by running a variable inflation factor analysis (VIF).
+# The VIF.R script contains the whole VIF analysis. The R script is sourced below. This script only requires the 'dataset' variable and after it is run, it will output the 'predictors' variable.
 ```{r VIF, results='markup'}
 source("VIF.R")
 ```
-# 4 Model Selection
-The Generalized Linear Model (GLM) must be made. The Domestication column is
-used as the dependent variable, and the other columns are the predictor
-variables. For the model selection the phylolm package and phyloglmstep function
-are used.
-```{r}
-source("ModelSelection.R")
-```
 
-
-# 5 Modelling analysis
-## WIP
-
-The phylogenetic generalized linear modelling analysis optimizes the model. The
-function phyloglm from the phylolm package is used for this.
-
-```{r}
-# Converting dependent variable to binary state
-# Domesticated = 1, wild = 0
-dataset$Domestication[dataset$Domestication==2] <- 0
-# Construct model
-GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4)
-summary(GLM)
-```
-
-
-
-
-
-# 4 Model Selection
-
-#The Generalized Linear Model (GLM) must be made. The Domestication column is
-#used as the dependent variable, and the other columns are the predictor
+### 4 Model Selection
+# A Generalized Linear Model (GLM) must be made. The Domestication column is
+# used as the dependent variable, and the other columns are the predictor
 #variables. For the model selection the phylolm package and phyloglmstep function
-#are used.
-
+#are required.
 ```{r}
 source("ModelSelection.R")
 ```
 
 
-# 5 Modelling analysis
+### 5 Modelling analysis
 ## WIP
 
-The phylogenetic generalized linear modeling analysis optimizes the model. The
-function phyloglm from the phylolm package is used for this.
+#The phylogenetic generalized linear modelling analysis optimizes the model. The
+#function phyloglm from the phylolm package is used for this.
 
 ```{r}
 # Converting dependent variable to binary state
 # Domesticated = 1, wild = 0
 dataset$Domestication[dataset$Domestication==2] <- 0
-
 # Construct model
 GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4)
-
 summary(GLM)
 ```
 
