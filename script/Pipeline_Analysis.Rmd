@@ -103,8 +103,9 @@ source("ModelSelection.R")
 # Domesticated = 1, wild = 0
 dataset$Domestication[dataset$Domestication==2] <- 0
 # Construct model
-GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4)
+GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 36.7462, log.alpha.bound = 4)
 summary(GLM)
+#Significant variables (those with p values <.05 include AdultBodyMass, Horns_Antlers, and avg moving speed)
 ```
 
 
