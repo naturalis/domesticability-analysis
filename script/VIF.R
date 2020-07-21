@@ -26,22 +26,22 @@ vif(startPredictors)
 # The set of predictors is declared for the VIF analysis, and a last check for
 # collinearity using the visualized matrix is done. During the first round the
 # AdultBodyMass was removed due to a high collinearity with other traits. However, because
-# Adultbodymass is hypothesized to be an important trait, it will be reinserted in this step.
+# Adultbodymass is hypothesized to be a biologically relevant trait, it will be reinserted in this step.
 vifPredictors <- cbind(dataset$X5.1_AdultBodyMass_g, startPredictors)
 colnames(vifPredictors)[1] <- "X5.1_AdultBodyMass_g"
-# Check VIF -> Adultbodymass is highly correlate with the other traits, so it cannot be used.
+# Check VIF -> Adultbodymass is highly correlated with the other traits.
 vif(vifPredictors)
 # Check correlation matrix
 matrix <- cor(vifPredictors, use = "pairwise.complete.obs")
 cat("The second corrplot is a visualization of the dataset after cutoff values are implemented and adultbodymass is added.")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.7)
-# Remove highest collinearity trait with the help of the matrix
-vifPredictors$X5.1_AdultBodyMass_g <- NULL
-# Check VIF -> normal values, we are good to go
+# Remove highest collinearity trait after adult body mass to see if it brings the value below 10
+vifPredictors$AVGFoodConsumption <- NULL
+# Check VIF -> normal values (<10), we are good to go
 vif(vifPredictors)
 
 ## FINAL PREDICTOR SET
-# Final set of predictors, containing: X1.1_ActivityCycle,
+# Final set of predictors, containing:  X5.1_AdultBodyMass_g, X1.1_ActivityCycle,
 # X6.1_DietBreadth, X12.1_HabitatBreadth, X15.1_LitterSize,
 # X21.1_PopulationDensity_n_km2, X10.2_SocialGrpSize, AVGFoodConsumption, Sociality,
 # SocialHierarchy, NumMales, MatingSystem, YearRoundBreeding, DevelopmentStrategy,
