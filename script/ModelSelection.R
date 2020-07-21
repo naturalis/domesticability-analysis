@@ -44,9 +44,6 @@ modelData$Domestication[modelData$Domestication==2] <- 0
 formula <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
 
 ## MODEL SELECTION
-# Using the phylostep.
-phylostep <- phylostep(formula = formula, starting.formula = NULL, data=modelData, phy=modelTree, model = "BM", direction = "forward", trace = 2)
-summary(phylostep)
 
 #Using the phyloglmstep
 phyloglmstep(formula, starting.formula = NULL, data=modelData, phy=modelTree, 
