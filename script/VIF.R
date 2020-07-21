@@ -4,13 +4,13 @@ library(caret)
 library(corrplot)
 
 ## BEGIN VALUES
-cat("The correlation matrix without removing any traits. There is a lot of collinearity present.")
+cat("The first correlation matrix is a visualization of the dataset without the removal of any traits. There is a lot of collinearity present. The VIF analysis will take care of this.")
 startPredictors <- dataset[,c(8:78)]
 matrix <- cor(startPredictors, use = "pairwise.complete.obs")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.5)
 ## CHECK CORRELATION MATRIX
 # The corrplot package is used to visualize the collinearity between the traits,
-# using the correlation matrix. With the findCorrelation function, the columns
+# using the correlation matrix. With the findCorrelation() function, the columns
 # with the highest collinearity are found. By visualizing the matrix, the
 # outcome of the findCorrelation function can be easily checked. At the
 # beginning of every round the VIF function is run, to check if the results are
@@ -33,7 +33,8 @@ colnames(vifPredictors)[1] <- "X5.1_AdultBodyMass_g"
 vif(vifPredictors)
 # Check correlation matrix
 matrix <- cor(vifPredictors, use = "pairwise.complete.obs")
-#corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.7)
+cat("The second corrplot is a visualization of the dataset after cutoff values are implemented and adultbodymass is added.")
+corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.7)
 # Remove highest collinearity trait with the help of the matrix
 vifPredictors$X5.1_AdultBodyMass_g <- NULL
 # Check VIF -> normal values, we are good to go
@@ -49,7 +50,7 @@ vif(vifPredictors)
 
 predictors <- vifPredictors
 ## FINAL VALUES
-cat("The correlation matrix after removing all unnecessary traits")
+cat("The third correlation matrix is our final product after removing all highly correlated traits.")
 matrix <- cor(predictors, use = "pairwise.complete.obs")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.5)
 ## REMOVE VARIABLES

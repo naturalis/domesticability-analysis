@@ -36,7 +36,7 @@ modelData$Domestication[modelData$Domestication==2] <- 0
 
 ## FORMULAS
 # The input formulas are defined, which are going to be used as input for the
-# phyloglmstep function.
+# phylostep function.
 
 # Formula with all the predictors
 # Results:  Current model: 
@@ -45,10 +45,13 @@ formula <- Domestication ~ X1.1_ActivityCycle + X15.1_LitterSize + X21.1_Populat
 
 
 ## MODEL SELECTION
-# Using the phyloglmstep.
+# Using the phylostep.
+phylostep(formula = formula, starting.formula = NULL, data=modelData, phy=modelTree, model = "BM", direction = "forward", trace = 2)
+
+#Using the phyloglmstep
 phyloglmstep(formula, starting.formula = NULL, data=modelData, phy=modelTree, 
              method="logistic_MPLE", direction = "forward", trace = 2, 
-             btol = 40, log.alpha.bound = 4, start.beta=NULL, 
+             btol = 30, log.alpha.bound = 4, start.beta=NULL, 
              start.alpha=NULL, boot = 0, full.matrix = TRUE, k=2)
 
 ## FINAL MODEL
