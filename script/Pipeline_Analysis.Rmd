@@ -3,12 +3,14 @@ title: "Pipeline_Analysis"
 output: html_document
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
+
 # 1 Import data
 # Our first step is to import packages and data into R. The trait data and OMI data also need to be merged.
 ### Load packages
 ```{r Load packages, message=FALSE}
+library(tinytex)
 library(ape)
 library(dplyr)
 library(usdm)
@@ -105,8 +107,6 @@ dataset$Domestication[dataset$Domestication==2] <- 0
 # Construct model
 GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 36.7462, log.alpha.bound = 4)
 summary(GLM)
-#Significant variables (those with p values <.05 include AdultBodyMass, Horns_Antlers, and avg moving speed)
 ```
-
 
 
