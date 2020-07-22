@@ -1,9 +1,11 @@
 ---
 title: "Pipeline_Analysis"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, results = FALSE)
 ```
 
 # 1 Import data
