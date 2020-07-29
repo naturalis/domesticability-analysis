@@ -111,31 +111,3 @@ GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "lo
 summary(GLM)
 ```
 
-
-
-### 4 Model Selection
-# A Generalized Linear Model (GLM) must be made. The Domestication column is
-# used as the dependent variable, and the other columns are the predictor
-#variables. For the model selection the phylolm package and phyloglmstep function
-#are required.
-```{r}
-source("ModelSelection.R")
-```
-
-
-### 5 Modelling analysis
-## WIP
-
-#The phylogenetic generalized linear modelling analysis optimizes the model. The
-#function phyloglm from the phylolm package is used for this.
-
-```{r}
-# Converting dependent variable to binary state
-# Domesticated = 1, wild = 0
-dataset$Domestication[dataset$Domestication==2] <- 0
-# Construct model
-GLM <- phyloglm(formula = finalFormula, data = dataset, phy = tree, method = "logistic_MPLE", btol = 36.7462, log.alpha.bound = 4)
-summary(GLM)
-```
-
-
