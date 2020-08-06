@@ -48,7 +48,7 @@ formula <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X15.1_Lit
 #Using the phyloglmstep
 phyloglmstep(formula, starting.formula = NULL, data=modelData, phy=modelTree, 
              method= "logistic_MPLE", direction = "forward", trace = 2, 
-             btol = 36.7462, log.alpha.bound = 4, start.beta=NULL, 
+             btol = 36, log.alpha.bound = 4, start.beta=NULL, 
              start.alpha=NULL, boot = 0, full.matrix = TRUE, k=2)
 
 ## FINAL MODEL
