@@ -31,8 +31,9 @@ vif(startPredictors)
 ## INSERT ADULTBODYMASS
 # The set of predictors is declared for the VIF analysis, and a last check for
 # collinearity using the visualized matrix is done. During the first round the
-# AdultBodyMass was removed due to a high collinearity with other traits. However, because
-# Adultbodymass is hypothesized to be a biologically relevant trait, it will be reinserted in this step.
+# AdultBodyMass was removed due to a high collinearity with other traits. However, 
+# because Adultbodymass is hypothesized to be a biologically relevant trait, 
+# it will be reinserted in this step.
 vifPredictors <- cbind(dataset$X5.1_AdultBodyMass_g, startPredictors)
 colnames(vifPredictors)[1] <- "X5.1_AdultBodyMass_g"
 
@@ -40,15 +41,20 @@ colnames(vifPredictors)[1] <- "X5.1_AdultBodyMass_g"
 vif(vifPredictors)
 
 # Check correlation matrix
-matrix <- cor(vifPredictors, use = "pairwise.complete.obs")
 cat("The second corrplot is a visualization of the dataset after cutoff values are implemented and 
     adultbodymass is added.")
+matrix <- cor(vifPredictors, use = "pairwise.complete.obs")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.7)
 
-# Remove highest collinearity trait after adult body mass to see if it brings the value below 10
+
+## VIF ANALYSIS
+# Check VIF -> AVGFoodConsumption has VIF value >10
+vif(vifPredictors)
+
+# Remove AVGFoodConsumption
 vifPredictors$AVGFoodConsumption <- NULL
 
-# Check VIF -> normal values (<10), we are good to go
+# Check VIF -> all values are below 10
 vif(vifPredictors)
 
 
