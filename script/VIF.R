@@ -5,7 +5,8 @@ library(corrplot)
 
 
 ## BEGIN VALUES
-cat("The first correlation matrix is a visualization of the dataset without the removal of any traits. There is a lot of collinearity present. The VIF analysis will take care of this.")
+cat("The first correlation matrix is a visualization of the dataset without the removal of any traits.
+    There is a lot of collinearity present. The VIF analysis will take care of this.")
 startPredictors <- dataset[,c(8:78)]
 matrix <- cor(startPredictors, use = "pairwise.complete.obs")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.5)
@@ -40,7 +41,8 @@ vif(vifPredictors)
 
 # Check correlation matrix
 matrix <- cor(vifPredictors, use = "pairwise.complete.obs")
-cat("The second corrplot is a visualization of the dataset after cutoff values are implemented and adultbodymass is added.")
+cat("The second corrplot is a visualization of the dataset after cutoff values are implemented and 
+    adultbodymass is added.")
 corrplot(matrix, type="lower", order = "hclust", tl.pos = "l", tl.col = "black", tl.cex = 0.7)
 
 # Remove highest collinearity trait after adult body mass to see if it brings the value below 10
