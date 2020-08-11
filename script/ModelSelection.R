@@ -1,7 +1,3 @@
-## LOAD PACKAGES
-library(phylolm)
-
-
 ## PROCESS DATASET
 # A dataset without missing values is made. The X12.1_HabitatBreadth and
 # X6.1_DietBreadth are removed, due to there being not enough data for the
@@ -14,9 +10,6 @@ predictors$X12.1_HabitatBreadth <- NULL
 modelData <- cbind(dataset$CanonicalName, dataset$Domestication,predictors)
 names(modelData)[names(modelData)=="dataset$Domestication"] <- "Domestication"
 names(modelData)[names(modelData)=="dataset$CanonicalName"] <- "CanonicalName"
-
-# Only domesticated species REMOVE LATER
-#domData <- modelData[modelData$Domestication == 1,]
 
 # Only the rows without any missing values are selected
 modelData <- modelData[complete.cases(modelData),]
@@ -41,7 +34,11 @@ modelData$Domestication[modelData$Domestication==2] <- 0
 # Formula with all the predictors
 # Results:  Current model: 
 #           AIC(k=2): 28.3458557864183
-formula <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X15.1_LitterSize + X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + PETWettestQuarter + OrganicCarbon
+formula <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X15.1_LitterSize + 
+  X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + 
+  MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + 
+  NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + 
+  PETWettestQuarter + OrganicCarbon
 
 ## MODEL SELECTION
 
@@ -53,7 +50,8 @@ phyloglmstep(formula, starting.formula = NULL, data=modelData, phy=modelTree,
 
 ## FINAL MODEL
 # The final formula for the model constructed by the phyloglmstep function
-finalFormula <- Domestication ~ 1 + X5.1_AdultBodyMass_g + DevelopmentStrategy + Horns_Antlers + AVGMovingSpeed + AVGTravelDistance
+finalFormula <- Domestication ~ 1 + X5.1_AdultBodyMass_g + DevelopmentStrategy + 
+  Horns_Antlers + AVGMovingSpeed + AVGTravelDistance
 
 
 rm(dropTips, formula, modelData, modelTree)
