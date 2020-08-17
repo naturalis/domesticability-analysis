@@ -1,5 +1,5 @@
 # Define two subsets (domestic and wild species)
-data <- subset(dataset, select = c(Domestication, X5.1_AdultBodyMass_g, Horns_Antlers, AVGMovingSpeed))
+data <- subset(dataset, select = c(Domestication, X5.1_AdultBodyMass_g, DevelopmentStrategy, Horns_Antlers, AVGMovingSpeed, AVGTravelDistance))
 data_dom <- data[data$Domestication == 1,]
 data_wild <- data[data$Domestication == 0,]
 
@@ -40,3 +40,21 @@ boxplot(data_dom$AVGMovingSpeed, data_wild$AVGMovingSpeed,
 #axis(1, median(data_wild$AVGMovingSpeed, na.rm = TRUE))
 #abline(v=median(data_wild$AVGMovingSpeed, na.rm = TRUE), col="grey25", lwd=2)
 #abline(v=median(data_dom$AVGMovingSpeed, na.rm = TRUE), col="grey25", lwd=2)
+
+# DevelopmentStrategy
+boxplot(data_dom$DevelopmentStrategy, data_wild$DevelopmentStrategy,
+        main = "Development Strategy",
+        names = c("Domestic", "Wild"),
+        xlab = "Development strategy value (1, 2)",
+        ylim = c(0,3),
+        col = c("lightcoral", "cornflowerblue"),
+        horizontal = TRUE)
+
+# AVGTravelDistance
+boxplot(data_dom$AVGTravelDistance, data_wild$AVGTravelDistance,
+        main = "Average Travel Distance",
+        names = c("Domestic", "Wild"),
+        xlab = "Average travel distance (km/day) ",
+        ylim = c(0,200),
+        col = c("lightcoral", "cornflowerblue"),
+        horizontal = TRUE)
