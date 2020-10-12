@@ -31,7 +31,7 @@ The OMI data is found in the trait-geo-diverse-ungulates repository.
 ```{r import data}
 ungulatesData <- read.csv("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/CSV/ungulatesTraits.csv")
 omi <- read.csv("https://raw.githubusercontent.com/naturalis/trait-geo-diverse-ungulates/master/results/OMI/niche_traits.csv")
-tree <- read.tree("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/ungulates.tree")
+tree <- read.tree("https://raw.githubusercontent.com/naturalis/trait-organismal-ungulates/master/data/phylogeny/ungulates.tree")
 ```
 
 ### Merge datasets
@@ -75,14 +75,14 @@ setdiff(tree$tip.label, dataset$CanonicalName)
 
 rm(dropRows, dropTips)
 ```
+
 ### Miscellaneous preprocessing
 The dots in the column names are replaced with underscores. After that, the
 traits that consist of more than 100 missing values, traits that have no
 information gain and traits that are almost identical to other traits are
 removed.
 ```{r misc preprocessing}
-# Rename columns with dots in the name
-names(dataset)[names(dataset)=="Horns.Antlers"] <- "Horns_Antlers"
+# Rename column with dots in the name
 names(dataset)[names(dataset)=="X21.1_PopulationDensity_n.km2"] <- "X21.1_PopulationDensity_n_km2"
 
 # Remove traits that (almost) only consist of missing values (>100 NA)
@@ -92,10 +92,25 @@ dataset <- subset(dataset, select = -c(X5.4_WeaningBodyMass_g, X13.3_WeaningHead
 dataset <- subset(dataset, select = -c(Motility, ParentalCare, X12.2_Terrestriality))
 
 # Remove traits that are almost identical to other traits
-dataset <- subset(dataset, select = -c(PullStrength, NumOffspring, BreedingInterval, 
-                                       Diet, AVGWeight, MaturityReachFemale, MaturityReachMale,
-                                       X22.2_HomeRange_Indiv_km2, X5.3_NeonateBodyMass_g,
-                                       X16.1_LittersPerYear,X7.1_DispersalAge_d))
+dataset <- subset(dataset, select = -c(PullStrength, NumOffspring, BreedingInterval, Diet, AVGWeight, MaturityReachFemale, MaturityReachMale, X22.2_HomeRange_Indiv_km2, X5.3_NeonateBodyMass_g, X16.1_LittersPerYear,X7.1_DispersalAge_d))
+```
+
+### Set as factors
+Some of the columns are not seen as categorical, but as numeric. These must be converted
+to factors.
+```{r as factor}
+dataset$X1.1_ActivityCycle <- as.factor(dataset$X1.1_ActivityCycle)
+dataset$X6.1_DietBreadth <- as.factor(dataset$X6.1_DietBreadth)
+dataset$X12.1_HabitatBreadth <- as.factor(dataset$X12.1_HabitatBreadth)
+dataset$X6.2_TrophicLevel <- as.factor(dataset$X6.2_TrophicLevel)
+dataset$Sociality <- as.factor(dataset$Sociality)
+dataset$SocialHierarchy <- as.factor(dataset$SocialHierarchy)
+dataset$NumMales <- as.factor(dataset$NumMales)
+dataset$MatingSystem <- as.factor(dataset$MatingSystem)
+dataset$YearRoundBreeding <- as.factor(dataset$YearRoundBreeding)
+dataset$DevelopmentStrategy <- as.factor(dataset$DevelopmentStrategy)
+dataset$HeadOrnaments <- as.factor(dataset$HeadOrnaments)
+dataset$NaturalPredators <- as.factor(dataset$NaturalPredators)
 ```
 
 # 3 VIF-Analysis
@@ -103,12 +118,14 @@ There is probably collinearity present amongst the traits in the dataset.
 Collinearity can lead to bias in the model, so we must correct for this. This
 can be done by running a variable inflation factor analysis (VIF). The VIF.R
 script contains the whole VIF analysis. The R script is sourced below. This
-script only requires the 'dataset' variable and after it  is run, it will output
-the 'predictors' variable.
+script only requires the 'dataset' variable and after it  is run, it will output the 'predictors' variable.
 ```{r VIF, results='markup'}
+# Do the VIF analysis
 source("VIF.R")
-```
 
+# Final VIF values
+vif(vifPredictors)
+```
 
 # 4 Model Selection
 A Generalized Linear Model (GLM) must be made. The Domestication column is
@@ -116,7 +133,15 @@ used as the dependent variable, and the other columns are the predictor
 variables. For the model selection the phylolm package and phyloglmstep function
 are required.
 ```{r model selection, results='hide'}
+# Add factor predictors to numeric predictors
+factors <- dplyr::select_if(dataset, is.factor)
+predictors <- cbind(vifPredictors, factors)
+
+# Do the model selection
 source("ModelSelection.R")
+
+# Remove unneeded variables
+rm(vifPredictors, factors)
 ```
 
 #### Results:
@@ -168,8 +193,7 @@ a comprehensive model check. This function is not appropriate for models
 including phylogeny. The check will still be done, but the resulting
 interpretation may be skewed.
 ```{r model evaluation}
-# Load packages
-GLM <- glm(Domestication ~ 1 + X5.1_AdultBodyMass_g + DevelopmentStrategy + Horns_Antlers + AVGMovingSpeed + AVGTravelDistance, data = dataset, family = binomial)
+GLM <- glm(formula = finalFormula, data = dataset, family = gaussian)
 
 check_model(GLM)
 ```
