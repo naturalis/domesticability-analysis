@@ -25,32 +25,43 @@ modelTree <- drop.tip(tree, dropTips)
 # The 'wild' state (2) will be converted to the zero state (0). This way 'wild'
 # appears as 0 and 'domesticated' appears as 1.
 modelData$Domestication[modelData$Domestication==2] <- 0
+modelData$CanonicalName <- NULL
 
+test <- modelData
+test$X1.1_ActivityCycle <- droplevels(test$X1.1_ActivityCycle)
+test$X1.1_ActivityCycle <- NULL
 
 ## FORMULAS
-# The input formulas are defined, which are going to be used as input for the
+# The input formula is defined, which is going to be used as input for the
 # phyloglmstep function.
+formula <- Domestication ~ X5.1_AdultBodyMass_g + X9.1_GestationLen_d + X15.1_LitterSize + 
+  X17.1_MaxLongevity_m + X21.1_PopulationDensity_n_km2 + X23.1_SexualMaturityAge_d + 
+  X10.2_SocialGrpSize + X25.1_WeaningAge_d + Lifespan + AVGMovingSpeed + AVGTravelDistance + 
+  Aspect + BulkDensity + ClayPercentage + minTempWarmest + PETseasonality + PETWettestQuarter + 
+  OrganicCarbon + PhCaCL + Slope + bio15 + bio18 + bio19 + X1.1_ActivityCycle + 
+  X6.2_TrophicLevel + Sociality + SocialHierarchy + NumMales + MatingSystem + YearRoundBreeding +
+  DevelopmentStrategy + HeadOrnaments + NaturalPredators
 
-# Formula with all the predictors
-# Results:  Current model: 
-#           AIC(k=2): 28.3458557864183
-formula <- Domestication ~ X5.1_AdultBodyMass_g + X1.1_ActivityCycle + X15.1_LitterSize + 
-  X21.1_PopulationDensity_n_km2 + X10.2_SocialGrpSize + Sociality + SocialHierarchy + 
-  MatingSystem + YearRoundBreeding + DevelopmentStrategy + Horns_Antlers + Lifespan + 
-  NaturalPredators + AVGMovingSpeed + AVGTravelDistance + Aspect + ClayPercentage + 
-  PETWettestQuarter + OrganicCarbon
+formula <- Domestication ~ X5.1_AdultBodyMass_g + X9.1_GestationLen_d + X15.1_LitterSize + 
+  X17.1_MaxLongevity_m + X21.1_PopulationDensity_n_km2 + X23.1_SexualMaturityAge_d + 
+  X10.2_SocialGrpSize + X25.1_WeaningAge_d + Lifespan + AVGMovingSpeed + AVGTravelDistance + 
+  Aspect + BulkDensity + ClayPercentage + minTempWarmest + PETseasonality + PETWettestQuarter + 
+  OrganicCarbon + PhCaCL + Slope + bio15 + bio18 + bio19 + 
+  X6.2_TrophicLevel + Sociality + SocialHierarchy + NumMales + MatingSystem + YearRoundBreeding +
+  DevelopmentStrategy + HeadOrnaments + NaturalPredators
+  
 
 ## MODEL SELECTION
 
 #Using the phyloglmstep
-phyloglmstep(formula, starting.formula = NULL, data=modelData, phy=modelTree, 
-             method= "logistic_MPLE", direction = "forward", trace = 2, 
-             btol = 36, log.alpha.bound = 4, start.beta=NULL, 
+phyloglmstep(formula, starting.formula = NULL, data=test, phy=modelTree, 
+             method= "logistic_IG10", direction = "forward", trace = 2, 
+             btol = 20, log.alpha.bound = 4, start.beta=NULL, 
              start.alpha=NULL, boot = 0, full.matrix = TRUE, k=2)
 
 ## FINAL MODEL
 # The final formula for the model constructed by the phyloglmstep function
-finalFormula <- Domestication ~ 1 + X5.1_AdultBodyMass_g + DevelopmentStrategy + 
+finalFormula <- Domestication ~ X5.1_AdultBodyMass_g + DevelopmentStrategy + 
   Horns_Antlers + AVGMovingSpeed + AVGTravelDistance
 
 
